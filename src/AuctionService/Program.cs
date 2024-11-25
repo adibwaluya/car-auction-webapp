@@ -8,7 +8,7 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<AuctionDbContext>(opt =>
 {
     // Take a connection string as its argumnent
-    opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConntection"));
+    opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
 var app = builder.Build();
