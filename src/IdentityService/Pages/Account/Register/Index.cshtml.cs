@@ -43,7 +43,7 @@ namespace IdentityService.Pages.Account.Register
             {
                 var user = new ApplicationUser
                 {
-                    UserName = Input.UserName,
+                    UserName = Input.Username,
                     Email = Input.Email,
                     EmailConfirmed = true       // simply because we have no way on sending confirmation email
                 };
