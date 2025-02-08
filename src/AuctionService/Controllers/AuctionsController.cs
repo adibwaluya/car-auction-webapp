@@ -7,6 +7,7 @@ using AutoMapper;
 using Contracts;
 using MassTransit;
 using MassTransit.Transports;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -50,12 +51,13 @@ public class AuctionsController : ControllerBase
         return _mapper.Map<AuctionDto>(auction);
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult<AuctionDto>> CreateAuction(CreateAuctionDto auctionDto)
     {
         var auction = _mapper.Map<Auction>(auctionDto);
-        // TODO: add current user as seller
-        auction.Seller = "test";
+
+        auction.Seller = User.Identity.Name;        // username to populate Seller property
 
         _context.Auctions.Add(auction);
 
@@ -72,6 +74,7 @@ public class AuctionsController : ControllerBase
         return CreatedAtAction(nameof(GetAuctionById), new { auction.Id }, newAuction);
     }
 
+    [Authorize]
     [HttpPut("{id}")]
     public async Task<ActionResult> UpdateAuction(Guid id, UpdateActionDto updateActionDto)
     {
@@ -80,7 +83,8 @@ public class AuctionsController : ControllerBase
 
         if (auction == null) return NotFound();
 
-        // TODO: check seller == username
+        // http 403
+        if (auction.Seller != User.Identity.Name) return Forbid();
 
         auction.Item.Make = updateActionDto.Make ?? auction.Item.Make;
         auction.Item.Model = updateActionDto.Model ?? auction.Item.Model;
@@ -97,6 +101,7 @@ public class AuctionsController : ControllerBase
         return BadRequest("Problem saving changes!");
     }
 
+    [Authorize]
     // For the sake of training/example
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteAuction(Guid id)
@@ -105,7 +110,7 @@ public class AuctionsController : ControllerBase
 
         if (auction == null) return NotFound();
 
-        // TODO: check seller == username
+        if (auction.Seller != User.Identity.Name) return Forbid();
 
         _context.Auctions.Remove(auction);
 
