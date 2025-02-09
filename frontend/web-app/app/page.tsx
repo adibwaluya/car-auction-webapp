@@ -1,9 +1,8 @@
 export default function Home() {
+  console.log('Server component')
   return (
     <div>
-      <h3 className='text-3xl font-semibold'>
-        Auction Web App
-      </h3>
+      Content goes here
     </div>
   );
 }
