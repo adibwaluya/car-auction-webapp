@@ -1,6 +1,7 @@
 import React from 'react'
 import Search from './Search'
 import Logo from './Logo'
+import LoginButton from './LoginButton'
 
 export default function Navbar() {
   console.log('Client component')  
@@ -9,7 +10,7 @@ export default function Navbar() {
     shadow-md'>
         <Logo />
         <Search />
-        <div>Login</div>
+        <LoginButton />
     </header>
   )
 }
