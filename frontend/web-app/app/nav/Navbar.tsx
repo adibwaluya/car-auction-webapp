@@ -1,6 +1,7 @@
 'use client'
 import React from 'react'
 import { IoCarSportOutline } from 'react-icons/io5'
+import Search from './Search'
 
 export default function Navbar() {
   console.log('Client component')  
@@ -11,7 +12,7 @@ export default function Navbar() {
             <IoCarSportOutline size={34} />
             <div>AWAP (Auction Web App)</div>
         </div>
-        <div>Search</div>
+        <Search />
         <div>Login</div>
     </header>
   )
