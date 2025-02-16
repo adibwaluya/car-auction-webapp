@@ -6,16 +6,17 @@ import { FaSearch } from 'react-icons/fa'
 
 export default function Search() {
   const setParams = useParamsStore(state => state.setParams);
-  const [value, setValue] = useState('');
+  const setSearchValue = useParamsStore(state => state.setSearchValue);
+  const searchValue = useParamsStore(state => state.searchValue);
 
   function onChange(event: any) {
-    setValue(event.target.value);
+    setSearchValue(event.target.value);
   }
 
   // NOTE: only full name of cars could be search (e.g. ferra would not give you ferrari cars)
   // This is due to the simplicity/limitation of mongodb search functionality
   function search() {
-    setParams({searchTerm: value});
+    setParams({searchTerm: searchValue});
   }
 
   return (
@@ -24,6 +25,7 @@ export default function Search() {
             onKeyDown={(e: any) => {
                 if (e.key === 'Enter') search();
             }} 
+            value={searchValue}
             onChange={onChange}
             type="text"
             placeholder='Search for cars by make, model, or color'
