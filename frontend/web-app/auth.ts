@@ -17,6 +17,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       } as OIDCConfig<Omit<Profile, 'username'>>),
   ],
   callbacks: {
+    // based on whether or not the auth object is populated
+    // if not, we get redirected to the login page
+    async authorized({auth}) {
+      return !!auth
+    },
     async jwt({token, profile}) {
       if (profile) {
         token.username = profile.username
