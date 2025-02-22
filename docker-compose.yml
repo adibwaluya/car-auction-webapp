@@ -67,11 +67,10 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:80
-      - IssuerUri=http://localhost:5001
-      - ClientApp=http://localhost:3000
+      - IssuerUri=http://id.car-auction-webapp.local
+      - ClientApp=http://app.car-auction-webapp.local
       - ConnectionStrings__DefaultConnection=Server=postgres:5432; User Id=postgres; Password=postgrespw; Database=identity
-    ports:
-      - 5001:80
+      - VIRTUAL_HOST=id.car-auction-webapp.local
     depends_on:
       - postgres
   gateway-svc:
@@ -82,8 +81,8 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:80
-    ports:
-      - 6001:80
+      - ClientApp=http://app.car-auction-webapp.local
+      - VIRTUAL_HOST=api.car-auction-webapp.local
   bid-svc:
     image: johnwalt1945/bid-svc:latest
     build:
@@ -121,16 +120,23 @@ services:
       dockerfile: frontend/web-app/Dockerfile
     volumes:
       - /var/lib/web/data
-    ports:
-      - 3000:3000
     environment:
       - AUTH_SECRET="7mIim3c5s3/+ciOshpHkdXAVB/3ocfBDLCEs+Wy5lOM="
-      - AUTH_URL=http://localhost:3000
+      - AUTH_URL=http://app.car-auction-webapp.local
       - AUTH_URL_INTERNAL=http://web-app:3000
       - API_URL=http://gateway-svc/
-      - ID_URL=http://localhost:5001
+      - ID_URL=http://id.car-auction-webapp.local
       - ID_URL_INTERNAL=http://identity-svc
-      - NOTIFY_URL=http://localhost:6001/notifications
+      - NOTIFY_URL=http://api.car-auction-webapp.local/notifications
+      - VIRTUAL_HOST=app.car-auction-webapp.local
+      - VIRTUAL_PORT=3000
+  nginx-proxy:
+    image: nginxproxy/nginx-proxy
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
 volumes:
   pgdata:
   mongodata:
