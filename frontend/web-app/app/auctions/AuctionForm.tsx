@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, TextInput } from 'flowbite-react';
+import { Button } from 'flowbite-react';
 import React, { useEffect } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import Input from '../components/Input';
@@ -28,7 +28,7 @@ export default function AuctionForm({auction}: Props) {
             reset({make, model, color, mileage, year});
         }
         setFocus('make');
-    }, [setFocus]);
+    }, [auction, reset, setFocus]);
 
     async function onSubmit(data: FieldValues) {
         try {
@@ -48,7 +48,16 @@ export default function AuctionForm({auction}: Props) {
             }
             router.push(`/auctions/details/${id}`)
         } catch (error) {
-            toast.error(error.status + ' ' + error.message)
+            //toast.error(error.status + ' ' + error.message)
+            // Narrow the type of `error`
+            if (error instanceof Error) {
+                toast.error(`${error.name}: ${error.message}`);
+            } else if (typeof error === 'object' && error !== null && 'status' in error && 'message' in error) {
+                toast.error(`${(error as { status: string }).status} ${(error as { message: string }).message}`);
+            } else {
+                toast.error('An unexpected error occurred.');
+            }
+            
         }
     }
 

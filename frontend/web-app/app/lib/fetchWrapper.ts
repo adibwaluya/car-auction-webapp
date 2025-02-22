@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-empty-object-type */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { auth } from "@/auth";
-import { headers } from "next/headers"
 
-const baseUrl = 'http://localhost:6001/'
+const baseUrl = process.env.API_URL;
 
 async function get(url: string) {
     const requestOptions = {

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 'use server'
 
-import { fetchWrapper } from "@/lib/fetchWrapper";
+import { fetchWrapper } from "@/app/lib/fetchWrapper";
 import { Auction, Bid, PagedResult } from "@/types";
 import { revalidatePath } from "next/cache";
 import { FieldValues } from "react-hook-form";
